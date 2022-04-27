@@ -287,15 +287,15 @@ bool write_float_grayscale_to_tga(const char* const filename, const float_graysc
 
 			if (l.pixel_data[float_index] < 0)
 			{
-				pixel_data[fb_index] = static_cast<unsigned char>(-l.pixel_data[float_index]/greatest_abs * 255.0);
+				pixel_data[fb_index] = 0;
 				pixel_data[fb_index + 1] = 0;// static_cast<unsigned char>(l.pixel_data[float_index] * 255.0);
-				pixel_data[fb_index + 2] = 0;// static_cast<unsigned char>(l.pixel_data[float_index] * 255.0);
+				pixel_data[fb_index + 2] = static_cast<unsigned char>(-l.pixel_data[float_index] / greatest_abs * 255.0);// static_cast<unsigned char>(l.pixel_data[float_index] * 255.0);
 			}
 			else
 			{
-				pixel_data[fb_index] = 0;// static_cast<unsigned char>(l.pixel_data[float_index] * 255.0);
+				pixel_data[fb_index] = static_cast<unsigned char>(l.pixel_data[float_index] / greatest_abs * 255.0);;// static_cast<unsigned char>(l.pixel_data[float_index] * 255.0);
 				pixel_data[fb_index + 1] = 0;// static_cast<unsigned char>(l.pixel_data[float_index] * 255.0);
-				pixel_data[fb_index + 2] = static_cast<unsigned char>(l.pixel_data[float_index]/greatest_abs * 255.0);
+				pixel_data[fb_index + 2] = 0;
 			}
 		}
 	}

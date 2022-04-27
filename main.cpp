@@ -22,6 +22,10 @@ int main(int argc, char** argv)
 		get_vertices();
 		res_by_res = get_data(marching_squares_resolution);
 
+		for (size_t i = 0; i < res_by_res.size(); i++)
+			res_by_res[i] = opencv_blur(res_by_res[i], 1);
+
+
 		add_images.push_back(res_by_res[0]);
 
 		float_grayscale luma;
@@ -209,7 +213,7 @@ void display_func(void)
 	glScalef(inverse_width, inverse_width, inverse_width);
 
 	// Render a dark background.
-	glColor3f(0, 0, 0);
+	glColor3f(202.0f/255.0f, 170.0f/255.0f, 170.0f/255.0f);
 	glBegin(GL_QUADS);
 		glVertex2f(-template_width*0.5f, template_height * 0.5f);
 		glVertex2f(-template_width * 0.5f, -template_height * 0.5f);
@@ -223,35 +227,35 @@ void display_func(void)
 
 
 
-	//glBegin(GL_TRIANGLES);
+	glBegin(GL_TRIANGLES);
 
-	//for (size_t i = 0; i < triangles.size(); i++)
-	//{
-	//	glColor3f(
-	//		(colours[i].r + 1.0f) / 2.0f, 
-	//		(colours[i].g + 1.0f) / 2.0f,
-	//		(colours[i].b + 1.0f) / 2.0f);
+	for (size_t i = 0; i < triangles.size(); i++)
+	{
+		glColor3f(
+			(205.0f / 255.0f),
+			(205.0f / 255.0f),
+			(226.0f / 255.0f));
 
-	//	for (size_t j = 0; j < triangles[i].size(); j++)
-	//	{
-	//		glVertex2f(triangles[i][j].vertex[0].x, triangles[i][j].vertex[0].y);
-	//		glVertex2f(triangles[i][j].vertex[1].x, triangles[i][j].vertex[1].y);
-	//		glVertex2f(triangles[i][j].vertex[2].x, triangles[i][j].vertex[2].y);
-	//	}
-	//}
-	//glEnd();
+		for (size_t j = 0; j < triangles[i].size(); j++)
+		{
+			glVertex2f(triangles[i][j].vertex[0].x, triangles[i][j].vertex[0].y);
+			glVertex2f(triangles[i][j].vertex[1].x, triangles[i][j].vertex[1].y);
+			glVertex2f(triangles[i][j].vertex[2].x, triangles[i][j].vertex[2].y);
+		}
+	}
+	glEnd();
 
 
 
-	// Draw triangle outlines
+	////// Draw triangle outlines
 	//glBegin(GL_LINES);
 
 	//for (size_t i = 0; i < triangles.size(); i++)
 	//{
 	//	glColor3f(
-	//		(colours[i].r + 2.0f) / 3.0f,
-	//		(colours[i].g + 2.0f) / 3.0f,
-	//		(colours[i].b + 2.0f) / 3.0f);
+	//		(205.0f / 255.0f + 2.0f) / 3.0f,
+	//		(205.0f / 255.0f + 2.0f) / 3.0f,
+	//		(226.0f / 255.0f + 2.0f) / 3.0f);
 
 	//	for (size_t j = 0; j < triangles[i].size(); j++)
 	//	{
@@ -279,16 +283,19 @@ void display_func(void)
 
 
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glLineWidth(1);
 	glBegin(GL_LINES);
+
 
 
 	for (size_t n = 0; n < add_contours.size(); n++)
 	{
 		for (size_t i = 0; i < add_contours[n].size(); i++)
 		{
-			glColor3f(0.25f, 0.25f, 0.25f);// static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX));// colours[i].r, colours[i].g, colours[i].b);
+			glColor4f(0.25f, 0.25f, 0.25f, 0.25f);// static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX));// colours[i].r, colours[i].g, colours[i].b);
 
 			for (size_t j = 0; j < add_contours[n][i].d.size(); j++)
 			{
@@ -298,21 +305,23 @@ void display_func(void)
 		}
 	}
 
+
+
 	glEnd();
 	glLineWidth(1);
 
+	glDisable(GL_BLEND);
 
 
 
 
-
-	glLineWidth(1);
+	glLineWidth(2);
 	glBegin(GL_LINES);
 
 
 	for (size_t i = 0; i < avg_contours.size(); i++)
 	{
-		glColor3f(1, 0.5f, 0);// static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX));// colours[i].r, colours[i].g, colours[i].b);
+		glColor3f(0, 0, 0);// static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX), static_cast <float> (rand()) / static_cast <float> (RAND_MAX));// colours[i].r, colours[i].g, colours[i].b);
 
 		for (size_t j = 0; j < avg_contours[i].d.size(); j++)
 		{
